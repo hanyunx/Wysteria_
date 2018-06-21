@@ -1,0 +1,142 @@
+(* Run this (as Alice) as follows:
+
+  ./bin/wysteria examples/cotv_scratch.wy --i-am \!Alice --we-are 'par({!Alice,!Bob})'
+
+*)
+
+let all = {!Alice,!Bob} in
+
+(* 
+   kind -- public
+   hp   -- public
+   atk  -- secret
+   def  -- secret
+   mag  -- secret
+   res  -- secret
+   morale -- secret
+   move_dis -- public
+   controller -- public
+*)
+
+(* 
+ kind = [ Warrior=0 | Mage=1 | Swordsman=2 ]
+ type soldier =
+   {#kind:nat,
+    #hp:Sh all nat,
+    #atk:Sh all nat,
+    #def:Sh all nat,
+    #mag:Sh all nat,
+    #res:Sh all nat,
+    #morale:Sh all nat}
+*)
+
+let make_soldier =
+  (* Creates a soldier from some private statistics known only to x. *)     
+  \(x:ps{singl and subeq all }). (* x is the sender of the soldier data. *)
+  \(stats: {#kind:nat,
+            #hp:W x nat,
+            #atk:W x nat,
+            #def:W x nat,
+            #mag:W x nat,
+            #res:W x nat,
+            #morale:W x nat}).
+  let soldier @ sec(all) =
+    let kind = stats.#kind in
+    let hp   = makesh ((stats.#hp)[x]) in
+    let atk  = makesh ((stats.#atk)[x]) in
+    let def  = makesh ((stats.#def)[x]) in
+    let mag  = makesh ((stats.#mag)[x]) in
+    let res  = makesh ((stats.#res)[x]) in
+    let morale = makesh ((stats.#morale)[x]) in
+    {#kind:kind,
+     #hp:hp,
+     #atk:atk,
+     #def:def,
+     #mag:mag,
+     #res:res,
+     #morale:morale }
+  in
+  soldier
+in
+
+let calc_damage = 
+  (* given two soldiers, an attacker and a victim, 
+     calc_damage calculates the damage of the attacker on the victim. *)
+  \(atk: {#kind:nat,
+          #hp:Sh all nat,
+          #atk:Sh all nat,
+          #def:Sh all nat,
+          #mag:Sh all nat,
+          #res:Sh all nat,
+          #morale:Sh all nat} ). 
+  \(vic: {#kind:nat,
+          #hp:Sh all nat,
+          #atk:Sh all nat,
+          #def:Sh all nat,
+          #mag:Sh all nat,
+          #res:Sh all nat,
+          #morale:Sh all nat} ). 
+   let damage @ sec(all) =
+     let atk_morale = combsh (atk.#morale) in
+     let vic_morale = combsh (vic.#morale) in
+     let dif_morale = atk_morale - vic_morale in
+     let atk_mag = combsh (atk.#mag) in
+     let vic_res = combsh (vic.#res) in
+     let atk_atk = combsh (atk.#atk) in
+     let vic_def = combsh (vic.#def) in
+     if atk.#kind = 0 then
+       dif_morale + (atk_mag - vic_res)
+     else
+       dif_morale + (atk_atk - vic_def)
+   in
+   damage
+in  
+
+(* Creating some dummy soldiers: *)
+
+let sh_0 @ sec(all) = makesh 0 in
+let sh_10 @ sec(all) = makesh 10 in
+let sh_35 @ sec(all) = makesh 35 in
+
+let soldier_x @ par(all) = {
+   #kind       : 0,
+   #hp         : sh_10,
+   #atk        : sh_35,
+   #def        : sh_35,
+   #mag        : sh_35,
+   #res        : sh_35,
+   #morale     : sh_35,
+   #move_dis   : 5,
+   #controller : !Alice
+} in
+
+let soldier_y   @ par(all)   = {
+   #kind       : 0,
+   #hp         : sh_10,
+   #atk        : sh_35,
+   #def        : sh_35,
+   #mag        : sh_35,
+   #res        : sh_35,
+   #morale     : sh_35,
+   #move_dis   : 5,
+   #controller : !Bob
+} in
+
+
+let dummy_soldier @ par(all) = {
+   #kind       : 0,
+   #hp         : sh_0,
+   #atk        : sh_0,
+   #def        : sh_0,
+   #mag        : sh_0,
+   #res        : sh_0,
+   #morale     : sh_0,
+   #move_dis   : 5,
+   #controller : !Fart_face
+} in
+
+let soldiers @ par(all) = 
+  array [ 18 ] of dummy_soldier
+in
+
+0
