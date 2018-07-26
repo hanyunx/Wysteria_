@@ -1124,13 +1124,13 @@ let rec rungmw (princ:string) (conff:string) (outf:string) (shoutf:string) (outt
       ()
   end;
 
-  let written = Unix.write !gmwsock conff 0 (String.length conff) in
+  let written = Unix.write !gmwsock (Bytes.of_string conff) 0 (String.length conff) in
   if not (written  = String.length conff) then
     raise (CGenError "Cannot write to the main server socket")
   else
     let statusstr = String.make 5 '.' in
     (*print_string "Waiting for GMW"; print_newline ();*)
-    let statusn = Unix.read !gmwsock statusstr 0 4 in
+    let statusn = Unix.read !gmwsock (Bytes.of_string statusstr) 0 4 in
     assert(statusn = 4);
     (*let status = int_of_string (String.sub statusstr 0 statusn) in*)
     (*print_string "status = "; print_int status; print_newline ();*)
