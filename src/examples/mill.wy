@@ -20,15 +20,17 @@ let f = \ (x:ps{true}) . \ (y:W x nat) .
   wire x:tmp2
 in
 
-let all = {!Alice, !Bob, !Charlie} in
+let all = {!Alice, !Bob, !Charlie, !Dave} in
 let w1 = wire {!Alice}:47 in
 let w2 = wire {!Bob}:12 in
-let w3 = wire {!Charlie}:55 in
+let w3 = wire {!Charlie}:3 in
+let w4 = wire {!Dave}:8 in
 
 let w7 = w1 ++ w2 in
 let w8 = w7 ++ w3 in
+let w9 = w8 ++ w4 in
 
-let check_effects @ par(all) = (f all) w8
+let check_effects @ par(all) = (f all) w9
 in
 
 (* this wcopy lifts the resulst from par(all) mode to Top, we could do better with Top, also see the comment above *)

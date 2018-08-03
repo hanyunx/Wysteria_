@@ -1,0 +1,29 @@
+let allEqual = \ (x:ps{true}) . \ (w:W x nat) .
+  let tmp2 @ par(x) =
+  let tmp @ sec(x) =
+  let a @ sec(x) =
+      wfold x [w; {#c:0,#hd:0, #b:true};
+               \ (acc:{#c:nat, #hd:nat, #b:bool}) . \ (p:ps{true}) . \ (n:nat) .
+               let m = if acc.#c = 0 then
+                         n
+                       else
+                         acc.#hd
+               in
+               let c2 = acc.#c + 1 in
+               let r = n = m in
+                 if acc.#b then
+                   {#c:c2, #hd:m, #b:r}
+                 else
+                   {#c:c2, #hd:m, #b:false}
+              ]
+  in a.#b
+  in tmp
+  in wire x:tmp2
+in
+let all = {!Alice, !Bob, !Charlie} in
+let w1 = wire {!Alice}:3 in
+let w2 = wire {!Bob}:1 in
+let w3 = wire {!Charlie}:1 in
+let w7 = w1 ++ w2 in
+let w8 = w7 ++ w3 in
+(allEqual all) w8

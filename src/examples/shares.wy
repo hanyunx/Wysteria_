@@ -9,7 +9,7 @@ let all3 = subset all1 from 0 to 0 in
 (* let all5 = subset all 0 4 in *)
 {#f:all1, #g:all2, #h:all3}
 
-(*let w1 = wire {!Alice}:11 in
+(* let w1 = wire {!Alice}:11 in
 let w2 = wire {!Bob}:13 in
 let w3 = w1 ++ w2 in
 
@@ -19,44 +19,44 @@ let o @ sec({!Alice,!Bob}) =
   x * y
 in
 
-o*)
+o
 
 
-(* let v = { #f : 3, #g : 4 } in *)
+let v = { #f : 3, #g : 4 } in
 
-(* let w = wire all:v in *)
+let w = wire all:v in
 
 (* (\* __me__ is a special variable that is principal's name at runtime *\) *)
-(* let wrcmd = sysop strcat "cat > shfile_" __me__ in *)
-(* let writer = sysop run wrcmd in *)
+let wrcmd = sysop strcat "cat > shfile_" __me__ in
+let writer = sysop run wrcmd in
 
 (* (\* o contains shares of the record v *\) *)
-(* let o @ sec(all) = *)
-(*   let out = makesh w[!Alice] in *)
-(*   out *)
-(* in *)
+let o @ sec(all) =
+  let out = makesh w[!Alice] in
+  out
+in
 
 (* (\* each principal writes shares to file *\) *)
-(* let _ = sysop send writer o in *)
+let _ = sysop send writer o in
 
-(* let rdcmd = sysop strcat "cat < shfile_" __me__ in *)
-(* let reader = sysop run rdcmd in *)
+let rdcmd = sysop strcat "cat < shfile_" __me__ in
+let reader = sysop run rdcmd in
 
 (* (\* read shares back in o1 *\) *)
-(* let o1 = sysop recv (Sh all {#f:nat,#g:nat}) reader in *)
+let o1 = sysop recv (Sh all {#f:nat,#g:nat}) reader in
 
 (* (\* combine shares and return the g field + 1 *\) *)
-(* let m @ sec(all) = *)
-(*   let t = w[!Alice] in (\* dummy expr *\) *)
-(*   let r = combsh o1 in *)
-(*   let t1 = r.#g in *)
-(*   let t2 = t1 + 1 in *)
-(*   t2 *)
-(* in *)
+let m @ sec(all) =
+  let t = w[!Alice] in (\* dummy expr *\)
+  let r = combsh o1 in
+  let t1 = r.#g in
+  let t2 = t1 + 1 in
+  t2
+in
 
-(* m *)
+m
 
-(*let m @ sec(all) =
+let m @ sec(all) =
   let t   = w[!Alice] in
   let v   = combsh o in
   let inc = v + 1 in
@@ -71,4 +71,5 @@ let f @ sec(all) =
 in
 
 f
-*)
+
+ *)

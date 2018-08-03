@@ -77,7 +77,7 @@ let eval ast =
 	print_newline ();
 	()
   end;
-  (*let r = Gencircuit.gatherperformance.Gencircuit.collect () in
+  let r = Gencircuit.gatherperformance.Gencircuit.collect () in
   
   print_string "Total secure blocks: "; print_int (Gencircuit.gatherperformance.Gencircuit.length ()); print_newline ();
   print_string "Total time in dumping inputs: "; print_float r.Gencircuit.t_dumpinput; print_newline ();
@@ -88,9 +88,9 @@ let eval ast =
   print_string "Total time in parsing outputs: "; print_float r.Gencircuit.t_parseoutput; print_newline ();
   print_string "Total number of gates: "; print_int r.Gencircuit.num_gates; print_newline ();
   
-  print_newline ();*)
-  (*print_string "total opsem time : "; print_float (time2 -. time1);
-  print_newline ()*)
+  print_newline ();
+  (* print_string "total opsem time : "; print_float (time2 -. time1);
+  print_newline () *)
   ()
 
 let setargs (s:string array) :unit =

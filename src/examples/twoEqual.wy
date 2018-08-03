@@ -1,0 +1,27 @@
+let equal = \ (w:W {!Alice, !Bob} nat) .
+            let tmp @ par({!Alice, !Bob}) =
+             let b @ sec({!Alice, !Bob}) =
+                 if w[!Alice] = w[!Bob] then
+                     true
+                 else
+                     false
+              in b
+            in
+            wire {!Alice, !Bob}:tmp
+in
+let w = (wire !Alice:20) ++ (wire !Bob:20) in
+(*let check_effects @ par(w) = equal w
+in
+(* this wcopy lifts the resulst from par(all) mode to Top, we could do better with Top, also see the comment above *)
+wcopy as w from check_effects*)
+equal w
+
+
+(* let richer = \w:W {!Alice, !Bob} nat .
+             let b @ sec({!Alice, !Bob}) =
+                 if w[!Alice] > w[!Bob] then
+                     true
+                 else
+                     false
+             in
+             b *)
